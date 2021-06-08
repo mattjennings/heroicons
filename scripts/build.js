@@ -92,14 +92,20 @@ async function buildIcons(package, style, format) {
     icons.flatMap(async ({ componentName, svg }) => {
       let content = await transform[package](svg, componentName, format)
       let types
+      let typesExtension = '.d.ts'
 
       if (package === 'react') {
         types = `import * as React from 'react';\ndeclare function ${componentName}(props: React.ComponentProps<'svg'>): JSX.Element;\nexport default ${componentName};\n`
+      } else if (package === 'svelte') {
+        typesExtension = '.svelte.d.ts'
+        types = `/// <reference types="svelte" />\n/// <reference types="svelte2tsx/svelte-jsx" />\nimport { SvelteComponentTyped } from "svelte";\nexport interface ${componentName}Props extends svelte.JSX.HTMLAttributes<SVGElementTagNameMap["svg"]> {}\nexport default class ${componentName} extends SvelteComponentTyped<${componentName}Props, {}, {}> {}`
       }
 
       return [
         fs.writeFile(`${outDir}/${componentName}${extension}`, content, 'utf8'),
-        ...(types ? [fs.writeFile(`${outDir}/${componentName}.d.ts`, types, 'utf8')] : []),
+        ...(types
+          ? [fs.writeFile(`${outDir}/${componentName}${typesExtension}`, types, 'utf8')]
+          : []),
       ]
     })
   )

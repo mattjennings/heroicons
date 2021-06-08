@@ -1,6 +1,6 @@
 {
-  "name": "@heroicons/svelte",
-  "version": "1.0.0",
+  "name": "@mattjennings/heroicons-svelte",
+  "version": "0.0.6",
   "description": "",
   "keywords": [],
   "homepage": "https://github.com/tailwindlabs/heroicons#readme",
@@ -17,5 +17,8 @@
   },
   "peerDependencies": {
     "svelte": ">= 3"
+  },
+  "dependencies": {
+    "svelte2tsx": "^0.2.0"
   }
 }
